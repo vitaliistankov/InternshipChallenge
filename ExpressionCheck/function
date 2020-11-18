@@ -3,15 +3,29 @@ import java.util.LinkedList;
 
 public class ExpressionCheck {
     public static boolean isValidExpression(String expression) {
-        if (null == expression || ((expression.length() % 2) != 0)) {
+        char[] upperCharsPattern = "ABC".toCharArray(); //This is a template of valid letters
+        if (null == expression || ((expression.length() % 2) != 0)) { //Check if a string is empty or it has at least one not-matched letter
             return false;
+        } else {
+            for (char ch : expression.toCharArray()) {
+                boolean isCharExists = false;
+                for (char charPattern : upperCharsPattern) {
+                    if (Character.toUpperCase(ch) == charPattern) { //Check if any valid letters are in an input string
+                        isCharExists = true;
+                        break;
+                    }
+                }
+                if (!isCharExists) {
+                    return false;
+                }
+            }
         }
         Deque<Character> deque = new LinkedList<>();
         for (char ch : expression.toCharArray()) {
-            if (ch == 'A' || ch == 'B' || ch == 'C') {
+            if (Character.isUpperCase(ch)) {
                 deque.addFirst(ch);
             } else {
-                if (!deque.isEmpty() && ((deque.peekFirst() == 'A' && ch == 'a') || (deque.peekFirst() == 'B' && ch == 'b') || (deque.peekFirst() == 'C' && ch == 'c'))) {
+                if (!deque.isEmpty() && deque.peekFirst() == Character.toUpperCase(ch)) {
                     deque.removeFirst();
                 } else {
                     return false;
@@ -19,13 +33,18 @@ public class ExpressionCheck {
             }
         }
         return true;
-
     }
 
     public static void main(String[] args) {
 
-        boolean result = isValidExpression("BCAcaB");
-        System.out.println(result);
+        System.out.println(isValidExpression("AaBb")); //true
+        System.out.println(isValidExpression("BCAacb")); //true
+        System.out.println(isValidExpression("BCcAab")); //true
+        System.out.println(isValidExpression("ACABbBbaca")); //true
+        System.out.println(isValidExpression("AabB")); //false
+        System.out.println(isValidExpression("BCAcaB")); //false
+
     }
 
 }
+
