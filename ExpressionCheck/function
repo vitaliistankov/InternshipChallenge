@@ -1,0 +1,31 @@
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class ExpressionCheck {
+    public static boolean isValidExpression(String expression) {
+        if (null == expression || ((expression.length() % 2) != 0)) {
+            return false;
+        }
+        Deque<Character> deque = new LinkedList<>();
+        for (char ch : expression.toCharArray()) {
+            if (ch == 'A' || ch == 'B' || ch == 'C') {
+                deque.addFirst(ch);
+            } else {
+                if (!deque.isEmpty() && ((deque.peekFirst() == 'A' && ch == 'a') || (deque.peekFirst() == 'B' && ch == 'b') || (deque.peekFirst() == 'C' && ch == 'c'))) {
+                    deque.removeFirst();
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+
+    public static void main(String[] args) {
+
+        boolean result = isValidExpression("BCAcaB");
+        System.out.println(result);
+    }
+
+}
